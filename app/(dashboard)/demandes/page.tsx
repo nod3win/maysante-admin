@@ -24,14 +24,18 @@ function badge(type: string) {
 
 export default function DashboardPage() {
   const [demandes, setDemandes] = useState<Demande[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const limit = 50;
 
   useEffect(() => {
-    fetch("/api/demandes")
+    setLoading(true);
+    fetch(`/api/demandes?page=${page}&limit=${limit}`)
       .then((r) => r.json())
-      .then((d) => { setDemandes(d); setLoading(false); })
+      .then((d) => { setDemandes(d.items); setTotal(d.total); setLoading(false); })
       .catch(() => setLoading(false));
-  }, []);
+  }, [page]);
 
   const contacts = demandes.filter((d) => d.type === "contact").length;
   const appels = demandes.filter((d) => d.type === "appel").length;
@@ -45,7 +49,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
-          { label: "Total", value: demandes.length },
+          { label: "Total", value: total },
           { label: "Contacts", value: contacts },
           { label: "Rappels", value: appels },
         ].map(({ label, value }) => (
@@ -97,6 +101,30 @@ export default function DashboardPage() {
                 <span className="text-[#b0b0b0] group-hover:text-[#0a0a0a] transition-colors text-sm">→</span>
               </Link>
             ))}
+          </div>
+        )}
+
+        {total > limit && (
+          <div className="px-6 py-4 border-t border-[#e5e5e5] flex items-center justify-between">
+            <p className="text-xs text-[#737373]">
+              {(page - 1) * limit + 1}–{Math.min(page * limit, total)} sur {total}
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-3 py-1.5 text-xs border border-[#e5e5e5] rounded-lg hover:bg-[#f3f3f3] disabled:opacity-40 transition"
+              >
+                ← Précédent
+              </button>
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={page * limit >= total}
+                className="px-3 py-1.5 text-xs border border-[#e5e5e5] rounded-lg hover:bg-[#f3f3f3] disabled:opacity-40 transition"
+              >
+                Suivant →
+              </button>
+            </div>
           </div>
         )}
       </div>

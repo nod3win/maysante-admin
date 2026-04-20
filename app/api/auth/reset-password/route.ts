@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import pool from "@/lib/db";
 
 export async function POST(req: NextRequest) {
-  const { token, password } = await req.json();
-  if (!token || !password)
+  const body = await req.json().catch(() => null);
+  const { token, password } = body ?? {};
+
+  if (!token || !password || password.length < 8)
     return NextResponse.json({ error: "Données invalides." }, { status: 400 });
+
+  const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
 
   const [rows] = await pool.query(
     "SELECT id FROM admin_users WHERE reset_token = ? AND reset_token_expires > NOW()",
-    [token]
+    [tokenHash]
   );
   const user = (rows as { id: number }[])[0];
   if (!user)

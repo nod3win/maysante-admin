@@ -1,10 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+
+  const { searchParams } = req.nextUrl;
+  const page = Math.max(1, Number(searchParams.get("page") ?? 1));
+  const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit") ?? 50)));
+  const offset = (page - 1) * limit;
 
   const [contacts] = await pool.query(
     "SELECT id, 'contact' as type, nom, email, telephone, message, NULL as prenom, NULL as type_soin, created_at FROM contacts ORDER BY created_at DESC"
@@ -22,5 +27,8 @@ export async function GET() {
     return db - da;
   });
 
-  return NextResponse.json(all);
+  const total = all.length;
+  const items = all.slice(offset, offset + limit);
+
+  return NextResponse.json({ items, total, page, limit });
 }

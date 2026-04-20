@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ["mysql2"],
-  },
+  serverExternalPackages: ["mysql2", "bcryptjs"],
 };
 
 export default nextConfig;
