@@ -82,7 +82,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-xs text-[#b0b0b0] mt-6">
-          Corporus Software © {new Date().getFullYear()}
+          Corporus, LLC © {new Date().getFullYear()}
         </p>
       </div>
     </div>
