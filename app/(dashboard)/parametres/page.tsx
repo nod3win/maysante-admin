@@ -200,7 +200,7 @@ export default function ParametresPage() {
               type="email" required value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               className="w-full border border-[#e5e5e5] rounded-xl px-3.5 py-2.5 text-sm bg-white text-[#0a0a0a] outline-none focus:ring-2 focus:ring-[#0a0a0a] transition"
-              placeholder="exemple@corporus.be"
+              placeholder="exemple@corporus-software.com"
             />
           </div>
           <div>

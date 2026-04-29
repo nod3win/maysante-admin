@@ -47,7 +47,7 @@ export default function ForgotPasswordPage() {
                   type="email"
                   required
                   className="w-full border border-[#e5e5e5] rounded-xl px-3.5 py-2.5 text-sm bg-white text-[#0a0a0a] outline-none focus:ring-2 focus:ring-[#0a0a0a] focus:border-transparent transition"
-                  placeholder="admin@corporus.be"
+                  placeholder="admin@corporus-software.com"
                 />
               </div>
               <button

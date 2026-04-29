@@ -1,5 +1,5 @@
 /**
- * Usage: npx tsx scripts/create-admin.ts admin@corporus.be monMotDePasse
+ * Usage: npx tsx scripts/create-admin.ts admin@corporus-software.com monMotDePasse
  */
 import bcrypt from "bcryptjs";
 import mysql from "mysql2/promise";
