@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const PUBLIC_PATHS = ["/login", "/forgot-password", "/reset-password", "/api/auth"];
+const PUBLIC_PATHS = [
+  "/login",
+  "/forgot-password",
+  "/reset-password",
+  "/api/auth",
+  "/api/blog/generate", // appelé par QStash (signature vérifiée dans la route)
+];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

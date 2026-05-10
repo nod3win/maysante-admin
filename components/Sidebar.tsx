@@ -3,10 +3,12 @@
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { LayoutDashboard, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut, FileText, Sparkles } from "lucide-react";
 
 const nav = [
   { href: "/demandes", label: "Demandes", icon: LayoutDashboard },
+  { href: "/articles", label: "Articles", icon: FileText },
+  { href: "/articles/parametres-ia", label: "Génération IA", icon: Sparkles },
   { href: "/parametres", label: "Paramètres", icon: Settings },
 ];
 
@@ -27,7 +29,12 @@ export default function Sidebar() {
 
       <nav className="flex-1 px-3 py-4 space-y-1">
         {nav.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || pathname.startsWith(href);
+          // Conflict: /articles is prefix of /articles/parametres-ia.
+          // Highlight a more specific route only when path starts with it; otherwise exact match.
+          const moreSpecific = nav.some(
+            (n) => n.href !== href && n.href.startsWith(href + "/") && pathname.startsWith(n.href)
+          );
+          const active = !moreSpecific && (pathname === href || pathname.startsWith(href + "/"));
           return (
             <Link
               key={href}
