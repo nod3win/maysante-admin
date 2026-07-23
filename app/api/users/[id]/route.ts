@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import pool from "@/lib/db";
-import { getSession } from "@/lib/auth";
+import { requireSession } from "@/lib/auth";
 
 export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
   if (!session.isSuperAdmin) return NextResponse.json({ error: "Réservé au superadmin." }, { status: 403 });
 
   const { id } = await params;

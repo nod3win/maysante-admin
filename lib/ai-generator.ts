@@ -3,7 +3,7 @@ import sanitizeHtml from "sanitize-html";
 import { getRecentArticleSummaries } from "./articles";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-opus-4-7";
+const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5";
 
 export interface GeneratedArticle {
   title: string;
@@ -90,9 +90,11 @@ ${recentJson}
 
 Choisis un angle original et utile, puis appelle l'outil \`save_article\`.`;
 
+  // Sonnet 5 : le thinking adaptatif est actif par défaut et compte dans
+  // max_tokens — on garde de la marge pour un article complet.
   const response = await client.messages.create({
     model: MODEL,
-    max_tokens: 8192,
+    max_tokens: 16000,
     system: SYSTEM_PROMPT,
     tools,
     tool_choice: { type: "tool", name: "save_article" },

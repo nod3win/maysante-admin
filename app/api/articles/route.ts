@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "@/lib/auth";
+import { requireSession } from "@/lib/auth";
 import { listArticles, createArticle, type ArticleStatus } from "@/lib/articles";
 import { sanitizeBody } from "@/lib/ai-generator";
 
 export async function GET(req: NextRequest) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const status = req.nextUrl.searchParams.get("status") as ArticleStatus | "all" | null;
   const items = await listArticles({ status: status ?? "all" });
@@ -13,8 +13,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  const session = await requireSession();
+  if (session instanceof NextResponse) return session;
 
   const body = await req.json().catch(() => null);
   if (!body || typeof body.title !== "string" || typeof body.body !== "string") {

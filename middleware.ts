@@ -6,7 +6,7 @@ const PUBLIC_PATHS = [
   "/forgot-password",
   "/reset-password",
   "/api/auth",
-  "/api/blog/generate", // appelé par QStash (signature vérifiée dans la route)
+  "/api/blog/generate", // déclencheur externe optionnel (Bearer vérifié dans la route)
 ];
 
 export async function middleware(req: NextRequest) {

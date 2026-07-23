@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { SignJWT, jwtVerify } from "jose";
 import pool from "./db";
 
@@ -47,4 +48,11 @@ export async function getSession(): Promise<AdminPayload | null> {
     console.error("[getSession] DB error:", err);
     return null;
   }
+}
+
+/** Renvoie la session admin, ou une réponse 401 prête à être retournée. */
+export async function requireSession(): Promise<AdminPayload | NextResponse> {
+  const session = await getSession();
+  if (!session) return NextResponse.json({ error: "Non autorisé." }, { status: 401 });
+  return session;
 }

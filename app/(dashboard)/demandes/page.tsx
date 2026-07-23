@@ -25,6 +25,8 @@ function badge(type: string) {
 export default function DashboardPage() {
   const [demandes, setDemandes] = useState<Demande[]>([]);
   const [total, setTotal] = useState(0);
+  const [contacts, setContacts] = useState(0);
+  const [appels, setAppels] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const limit = 50;
@@ -33,12 +35,15 @@ export default function DashboardPage() {
     setLoading(true);
     fetch(`/api/demandes?page=${page}&limit=${limit}`)
       .then((r) => r.json())
-      .then((d) => { setDemandes(d.items); setTotal(d.total); setLoading(false); })
+      .then((d) => {
+        setDemandes(d.items);
+        setTotal(d.total);
+        setContacts(d.totalContacts);
+        setAppels(d.totalAppels);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, [page]);
-
-  const contacts = demandes.filter((d) => d.type === "contact").length;
-  const appels = demandes.filter((d) => d.type === "appel").length;
 
   return (
     <div className="max-w-5xl mx-auto">

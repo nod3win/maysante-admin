@@ -3,10 +3,11 @@
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { LayoutDashboard, Settings, LogOut, FileText, Sparkles } from "lucide-react";
+import { LayoutDashboard, Settings, LogOut, FileText, Sparkles, BarChart3 } from "lucide-react";
 
 const nav = [
   { href: "/demandes", label: "Demandes", icon: LayoutDashboard },
+  { href: "/statistiques", label: "Statistiques", icon: BarChart3 },
   { href: "/articles", label: "Articles", icon: FileText },
   { href: "/articles/parametres-ia", label: "Génération IA", icon: Sparkles },
   { href: "/parametres", label: "Paramètres", icon: Settings },
